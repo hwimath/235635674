@@ -6,7 +6,7 @@
   <!-- MathJax 로드 -->
   <script src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-mml-chtml.js" defer></script>
   <style>
-    /* 흑백 색조로 꾸밈 */
+    /* 흑백 색조 */
     body {
       background-color: #fff;
       color: #000;
@@ -14,26 +14,21 @@
       margin: 0; 
       padding: 0;
     }
-
     #appContainer {
       max-width: 700px;
       margin: 0 auto;
       padding: 20px;
     }
-
     h1, h2, h3, p, label, button {
       color: #000;
     }
-
     .hidden {
       display: none;
     }
-
     /* 전체 게임 시간 표시 */
     #totalTimeDisplay {
       margin-bottom: 10px;
     }
-
     /* 에너지바 (문제별 시간제한 시각화) */
     #energyBarContainer {
       width: 100%;
@@ -48,19 +43,16 @@
       width: 100%;
       transition: width 0.2s linear;
     }
-
     /* 기회 표시 */
     #chancesDisplay {
       margin-bottom: 10px;
       font-weight: bold;
     }
-
     /* 점수 표시 */
     #scoreDisplay {
       margin-bottom: 10px;
       font-weight: bold;
     }
-
     /* 문제 영역 */
     #questionArea {
       margin: 20px 0;
@@ -68,8 +60,7 @@
       padding: 15px;
       min-height: 150px;
     }
-
-    /* 보기 */
+    /* 보기 버튼 */
     .optionButton {
       display: block;
       margin: 8px 0;
@@ -82,13 +73,11 @@
     .optionButton:hover {
       background-color: #ccc;
     }
-
-    /* 난이도 선택 화면 등 */
+    /* 시작, 종료, 퀴즈 화면 */
     #startScreen, #endScreen, #quizScreen {
       margin-top: 20px;
     }
-
-    /* 반응 영역(서버 전송 결과 등) */
+    /* 서버 전송 결과 등 */
     #response {
       margin-top: 10px;
       white-space: pre;
@@ -99,11 +88,10 @@
 <div id="appContainer">
   <h1>함수의 극한의 성질</h1>
 
-  <!-- 첫 화면(이름 입력, 난이도 선택) -->
+  <!-- 첫 화면 (이름 입력, 난이도 선택) -->
   <div id="startScreen">
     <label for="playerName">이름을 입력하세요: </label>
     <input type="text" id="playerName" /><br /><br />
-
     <p>난이도를 선택하세요.</p>
     <button onclick="selectDifficulty('최상')">최상 (20초, 문제당 20점)</button><br />
     <button onclick="selectDifficulty('상')">상 (30초, 문제당 15점)</button><br />
@@ -116,12 +104,10 @@
     <div id="totalTimeDisplay">전체 시간: <span id="totalTime">0</span>초</div>
     <div id="chancesDisplay">남은 기회: 3</div>
     <div id="scoreDisplay">점수: 0</div>
-
-    <!-- 에너지바(시간제한 시각화) -->
+    <!-- 에너지바 (문제별 제한시간 시각화) -->
     <div id="energyBarContainer">
       <div id="energyBar"></div>
     </div>
-
     <!-- 문제 영역 -->
     <div id="questionArea"></div>
   </div>
@@ -138,9 +124,9 @@
 
 <script>
   /***************************************************
-   * 1) 문제 데이터 (모든 문제 포함, 일부 주석 제거 및 #95 수정)
+   * 1) 문제 데이터
+   * – 일부 중복되거나 계산이 지나치게 복잡하거나 근삿값이 답인 문제는 삭제하였습니다.
    ***************************************************/
-
   const allQuestions = [
     {
       question: "주어진 조건: \\(\\lim_{x \\to \\alpha} f(x) = -2\\). 다음을 구하시오: \\(\\lim_{x \\to \\alpha} 3f(x)\\).",
@@ -152,7 +138,7 @@
       ]
     },
     {
-      question: "주어진 조건: \\(\\lim_{x \\to \\alpha} f(x) = -2,\\; \\lim_{x \\to \\alpha} g(x) = 3\\). 다음을 구하시오: \\(\\lim_{x \\to \\alpha} \\{2f(x) + g(x)\\}\\).",
+      question: "주어진 조건: \\(\\lim_{x \\to \\alpha} f(x) = -2, \\; \\lim_{x \\to \\alpha} g(x) = 3\\). 다음을 구하시오: \\(\\lim_{x \\to \\alpha} \\{2f(x) + g(x)\\}\\).",
       answers: [
         { text: "-7", isCorrect: false },
         { text: "-1", isCorrect: true },
@@ -161,7 +147,7 @@
       ]
     },
     {
-      question: "주어진 조건: \\(\\lim_{x \\to \\alpha} f(x) = -2,\\; \\lim_{x \\to \\alpha} g(x) = 3\\). 다음을 구하시오: \\(\\lim_{x \\to \\alpha} f(x)g(x)\\).",
+      question: "주어진 조건: \\(\\lim_{x \\to \\alpha} f(x) = -2, \\; \\lim_{x \\to \\alpha} g(x) = 3\\). 다음을 구하시오: \\(\\lim_{x \\to \\alpha} f(x)g(x)\\).",
       answers: [
         { text: "-6", isCorrect: true },
         { text: "-3", isCorrect: false },
@@ -179,16 +165,16 @@
       ]
     },
     {
-      question: "주어진 조건: \\(\\lim_{x \\to \\alpha} f(x) = -2,\\; \\lim_{x \\to \\alpha} g(x) = 3\\). 다음을 구하시오: \\(\\lim_{x \\to \\alpha} \\dfrac{g(x)}{f(x)}\\).",
+      question: "주어진 조건: \\(\\lim_{x \\to \\alpha} f(x) = -2, \\; \\lim_{x \\to \\alpha} g(x) = 3\\). 다음을 구하시오: \\(\\lim_{x \\to \\alpha} \\dfrac{g(x)}{f(x)}\\).",
       answers: [
         { text: "-\\dfrac{3}{2}", isCorrect: true },
         { text: "-1",            isCorrect: false },
         { text: "1",             isCorrect: false },
-        { text: "\\dfrac{3}{2}", isCorrect: false }
+        { text: "\\dfrac{3}{2}",  isCorrect: false }
       ]
     },
     {
-      question: "주어진 조건: \\(\\lim_{x \\to \\alpha} f(x) = 3,\\; \\lim_{x \\to \\alpha} g(x) = -2\\). 다음을 구하시오: \\(\\lim_{x \\to \\alpha} \\dfrac{4f(x) + 1}{g(x) + 3}\\).",
+      question: "주어진 조건: \\(\\lim_{x \\to \\alpha} f(x) = 3, \\; \\lim_{x \\to \\alpha} g(x) = -2\\). 다음을 구하시오: \\(\\lim_{x \\to \\alpha} \\dfrac{4f(x) + 1}{g(x) + 3}\\).",
       answers: [
         { text: "10", isCorrect: false },
         { text: "11", isCorrect: false },
@@ -206,7 +192,7 @@
       ]
     },
     {
-      question: "주어진 조건: \\(\\lim_{x \\to \\alpha} f(x) = 3,\\; \\lim_{x \\to \\alpha} g(x) = -2\\). 다음을 구하시오: \\(\\lim_{x \\to \\alpha} \\{f(x) - 3g(x)\\}\\).",
+      question: "주어진 조건: \\(\\lim_{x \\to \\alpha} f(x) = 3, \\; \\lim_{x \\to \\alpha} g(x) = -2\\). 다음을 구하시오: \\(\\lim_{x \\to \\alpha} \\{f(x) - 3g(x)\\}\\).",
       answers: [
         { text: "-3", isCorrect: false },
         { text: "3",  isCorrect: false },
@@ -215,7 +201,7 @@
       ]
     },
     {
-      question: "주어진 조건: \\(\\lim_{x \\to \\alpha} f(x) = 3,\\; \\lim_{x \\to \\alpha} g(x) = -2\\). 다음을 구하시오: \\(\\lim_{x \\to \\alpha} f(x)g(x)\\).",
+      question: "주어진 조건: \\(\\lim_{x \\to \\alpha} f(x) = 3, \\; \\lim_{x \\to \\alpha} g(x) = -2\\). 다음을 구하시오: \\(\\lim_{x \\to \\alpha} f(x)g(x)\\).",
       answers: [
         { text: "-6", isCorrect: true },
         { text: "-3", isCorrect: false },
@@ -239,15 +225,6 @@
         { text: "-\\dfrac{1}{4}", isCorrect: false },
         { text: "\\dfrac{1}{4}",  isCorrect: false },
         { text: "\\dfrac{1}{2}",  isCorrect: false }
-      ]
-    },
-    {
-      question: "주어진 조건: \\(\\lim_{x \\to \\alpha} f(x) = 3,\\; \\lim_{x \\to \\alpha} g(x) = -2\\). 다음을 구하시오: \\(\\lim_{x \\to \\alpha} \\dfrac{4f(x) + 1}{g(x) + 3}\\).",
-      answers: [
-        { text: "10", isCorrect: false },
-        { text: "11", isCorrect: false },
-        { text: "12", isCorrect: false },
-        { text: "13", isCorrect: true }
       ]
     },
     {
@@ -692,24 +669,6 @@
       ]
     },
     {
-      question: "다음을 구하시오: \\(\\lim_{x \\to 0} \\dfrac{1}{x}\\Bigl(\\dfrac{1}{\\sqrt{3 - x}} - \\dfrac{1}{\\sqrt{3}}\\Bigr)\\).",
-      answers: [
-        { text: "-\\dfrac{1}{6}", isCorrect: false },
-        { text: "-\\dfrac{1}{3}", isCorrect: false },
-        { text: "\\dfrac{1}{3}",  isCorrect: false },
-        { text: "\\dfrac{1}{6}",  isCorrect: true }
-      ]
-    },
-    {
-      question: "다음을 구하시오: \\(\\lim_{x \\to 0} \\dfrac{1}{x}\\Bigl(\\dfrac{1}{\\sqrt{5 - x}} - \\dfrac{1}{\\sqrt{5}}\\Bigr)\\).",
-      answers: [
-        { text: "-\\dfrac{1}{10}", isCorrect: false },
-        { text: "-\\dfrac{1}{5}",  isCorrect: false },
-        { text: "\\dfrac{1}{5}",   isCorrect: false },
-        { text: "\\dfrac{1}{10}",  isCorrect: true }
-      ]
-    },
-    {
       question: "다음을 구하시오: \\(\\lim_{x \\to 0} \\Bigl(1 - \\dfrac{\\sqrt{x + 2}}{\\sqrt{x}}\\Bigr)\\).",
       answers: [
         { text: "-\\infty", isCorrect: true },
@@ -775,14 +734,14 @@
     document.getElementById("startScreen").classList.add("hidden");
     document.getElementById("quizScreen").classList.remove("hidden");
 
-    // 전체 게임 시간 표시 시작
+    // 전체 게임 시간 시작
     totalTime = 0;
     totalTimeInterval = setInterval(() => {
       totalTime++;
       document.getElementById("totalTime").innerText = totalTime;
     }, 1000);
 
-    // 문제 배열을 섞기 (무작위 출제)
+    // 문제 배열 섞기 (무작위 출제)
     shuffleArray(allQuestions);
 
     // 첫 문제 세팅
@@ -799,10 +758,12 @@
    * 문제 표시
    ***************************************************/
   function showQuestion() {
-    // 만약 currentQuestionIndex가 전체 문제 수를 초과하면 
-    // -> 모든 문제를 한 번씩 다 낸 뒤에 "끝없이 랜덤" 모드
+    // 이전 문제의 "다음문제" 버튼이 있으면 제거
+    const questionArea = document.getElementById("questionArea");
+    questionArea.innerHTML = "";
+
+    // 만약 모든 문제를 다 냈으면 무작위로 문제 출제
     if(currentQuestionIndex >= allQuestions.length) {
-      // 계속 무작위로 문제 내주기
       currentQuestionIndex = Math.floor(Math.random() * allQuestions.length);
     }
 
@@ -811,14 +772,8 @@
     // 보기도 섞기
     shuffleArray(q.answers);
 
-    const questionArea = document.getElementById("questionArea");
-    questionArea.innerHTML = `
-      <div>
-        <p>${q.question}</p>
-      </div>
-    `;
+    questionArea.innerHTML += `<div><p>${q.question}</p></div>`;
 
-    // 보기 버튼 생성
     q.answers.forEach((ans) => {
       const btn = document.createElement("button");
       btn.className = "optionButton";
@@ -830,11 +785,9 @@
     // MathJax 수식 렌더링
     MathJax.typeset();
 
-    // 문제별 타이머 설정
+    // 문제별 타이머 설정 (난이도 '하' 제외)
     if(selectedDifficulty === "하") {
-      // 시간 무제한
       document.getElementById("energyBar").style.width = "100%";
-      // clear any existing timer
       if(questionTimer) clearInterval(questionTimer);
     } else {
       questionTime = questionTimeLimit;
@@ -844,7 +797,6 @@
         questionTime--;
         updateEnergyBar();
         if(questionTime <= 0) {
-          // 시간 초과 => 기회 1 감소, 다음 문제로
           loseChanceByTimeout();
         }
       }, 1000);
@@ -855,7 +807,6 @@
    * 답안 체크
    ***************************************************/
   function checkAnswer(answerObj) {
-    // 시간 타이머 종료
     if(questionTimer) {
       clearInterval(questionTimer);
       questionTimer = null;
@@ -865,73 +816,67 @@
     const questionArea = document.getElementById("questionArea");
 
     if(answerObj.isCorrect) {
-      // 정답
       score += scorePerQuestion;
       updateScoreDisplay();
-
-      // 정답 표시
       questionArea.innerHTML += "<p>정답입니다!</p>";
     } else {
-      // 오답 -> 기회 1 감소
       chances--;
       updateChancesDisplay();
-
-      // 정답 표시
       const correctAns = q.answers.find(a => a.isCorrect);
       questionArea.innerHTML += `<p>오답입니다. 정답은 <strong>${correctAns.text}</strong> 입니다.</p>`;
     }
 
-    // MathJax 갱신
     MathJax.typeset();
 
-    // 3번 틀리면 게임 종료
     if(chances <= 0) {
       endGame();
-      return;
+    } else {
+      showNextButton();
     }
-
-    // 잠시 후 다음 문제
-    setTimeout(() => {
-      currentQuestionIndex++;
-      showQuestion();
-    }, 1500);
   }
 
   /***************************************************
-   * 시간 초과
+   * 시간 초과 시 처리
    ***************************************************/
   function loseChanceByTimeout() {
     clearInterval(questionTimer);
     questionTimer = null;
-
-    // 기회 1 감소
     chances--;
     updateChancesDisplay();
 
     const q = allQuestions[currentQuestionIndex];
     const questionArea = document.getElementById("questionArea");
     const correctAns = q.answers.find(a => a.isCorrect);
-
     questionArea.innerHTML += `<p>시간 초과! 정답은 <strong>${correctAns.text}</strong> 입니다.</p>`;
     MathJax.typeset();
 
     if(chances <= 0) {
       endGame();
-      return;
+    } else {
+      showNextButton();
     }
+  }
 
-    // 잠시 후 다음 문제
-    setTimeout(() => {
-      currentQuestionIndex++;
-      showQuestion();
-    }, 1500);
+  /***************************************************
+   * "다음문제" 버튼 생성 및 다음 문제 진행
+   ***************************************************/
+  function showNextButton() {
+    const questionArea = document.getElementById("questionArea");
+    const nextBtn = document.createElement("button");
+    nextBtn.innerText = "다음문제";
+    nextBtn.onclick = nextQuestion;
+    questionArea.appendChild(nextBtn);
+  }
+
+  function nextQuestion() {
+    currentQuestionIndex++;
+    showQuestion();
   }
 
   /***************************************************
    * 게임 종료
    ***************************************************/
   function endGame() {
-    // 타이머 정리
     if(questionTimer) clearInterval(questionTimer);
     if(totalTimeInterval) clearInterval(totalTimeInterval);
 
@@ -945,11 +890,10 @@
   /***************************************************
    * 점수 전송 함수
    ***************************************************/
-  function sendScore() {
+  async function sendScore() {
     saveData("함수의 극한의 성질", playerName, score, totalTime);
   }
 
-  // 서버 전송 로직 (async/await로 수정)
   async function saveData(game, name, score, elapsedTime) {
     const FUNCTION_URL = "https://us-central1-record-f420d.cloudfunctions.net/report";
 
@@ -963,9 +907,7 @@
     try {
       const response = await fetch(FUNCTION_URL, {
         method: 'POST',
-        headers: {
-          'Content-Type': 'application/json'
-        },
+        headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify(requestData)
       });
 
@@ -986,7 +928,7 @@
   }
 
   /***************************************************
-   * 보조 함수: 배열을 무작위로 섞기
+   * 보조 함수: 배열 무작위 섞기
    ***************************************************/
   function shuffleArray(arr) {
     for (let i = arr.length - 1; i > 0; i--) {

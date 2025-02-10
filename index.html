@@ -125,7 +125,8 @@
 <script>
   /***************************************************
    * 1) 문제 데이터
-   * – 일부 중복되거나 계산이 지나치게 복잡하거나 근삿값이 답인 문제는 삭제하였습니다.
+   * – 중고등학생이 풀기에 지나치게 계산이 복잡하거나 조건이 부족한 문제,
+   *   근삿값이 답인 문제, 또는 어색한 문제는 삭제하였습니다.
    ***************************************************/
   const allQuestions = [
     {
@@ -293,10 +294,10 @@
     {
       question: "다음을 구하시오: \\(\\lim_{x \\to 1} \\dfrac{\\sqrt{1+x} - \\sqrt{1 - x}}{x}\\).",
       answers: [
-        { text: "0",       isCorrect: false },
-        { text: "1",       isCorrect: false },
+        { text: "0",         isCorrect: false },
+        { text: "1",         isCorrect: false },
         { text: "\\sqrt{2}", isCorrect: true },
-        { text: "2",       isCorrect: false }
+        { text: "2",         isCorrect: false }
       ]
     },
     {
@@ -624,33 +625,6 @@
       ]
     },
     {
-      question: "다음을 구하시오: \\(\\lim_{x \\to 0} (\\sqrt{x^2 + 2x} - x)\\).",
-      answers: [
-        { text: "0",  isCorrect: true },
-        { text: "1",  isCorrect: false },
-        { text: "2",  isCorrect: false },
-        { text: "\\infty", isCorrect: false }
-      ]
-    },
-    {
-      question: "다음을 구하시오: \\(\\lim_{x \\to 0} (\\sqrt{x^2 + 6x} - x)\\).",
-      answers: [
-        { text: "0",  isCorrect: true },
-        { text: "1",  isCorrect: false },
-        { text: "3",  isCorrect: false },
-        { text: "\\infty", isCorrect: false }
-      ]
-    },
-    {
-      question: "다음을 구하시오: \\(\\lim_{x \\to 0} (\\sqrt{x^2 - 3x} - \\sqrt{x^2 + 3x})\\).",
-      answers: [
-        { text: "-3", isCorrect: false },
-        { text: "0",  isCorrect: true },
-        { text: "3",  isCorrect: false },
-        { text: "\\infty", isCorrect: false }
-      ]
-    },
-    {
       question: "다음을 구하시오: \\(\\lim_{x \\to 0} \\dfrac{1}{x}\\Bigl(\\dfrac{1}{x+1} - 1\\Bigr)\\).",
       answers: [
         { text: "-1", isCorrect: true },
@@ -667,17 +641,9 @@
         { text: "1",  isCorrect: false },
         { text: "2",  isCorrect: true }
       ]
-    },
-    {
-      question: "다음을 구하시오: \\(\\lim_{x \\to 0} \\Bigl(1 - \\dfrac{\\sqrt{x + 2}}{\\sqrt{x}}\\Bigr)\\).",
-      answers: [
-        { text: "-\\infty", isCorrect: true },
-        { text: "0",        isCorrect: false },
-        { text: "1",        isCorrect: false },
-        { text: "\\infty",  isCorrect: false }
-      ]
     }
   ];
+  // (삭제된 문제: 인덱스상 원래 56, 57, 58, 61번 문제는 제거됨)
 
   /***************************************************
    * 전역 변수들
